@@ -23,3 +23,4 @@ class Templates:
         with open('email_signature.txt', 'r') as f:
             signature = f.read()
             return signature
+# 
