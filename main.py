@@ -43,9 +43,9 @@ def main():
     investors = read_investors_from_csv(args.file)
 
     email_manager = EmailManager()
-
+    print("investors", investors)
     for investor in investors:
-        print(f'Running - {investor['name']}')
+        # print(f'Running - {investor["name"]}')
         prompt = format_prompt(investor)
 
         try:
@@ -77,7 +77,7 @@ def main():
         body += '\n\n' + signature
 
         if args.test:
-            print(f'Test Result for {investor['name']}:\n{body}')
+            print(f'Test Result for {investor["name"]}:\n{body}')
         else:
             email_manager.send_email([investor['email']], [], [], Templates.EMAIL_SUBJECT, body)
 
@@ -87,9 +87,23 @@ def main():
         follow_up_body += '\n\n' + signature
 
         if args.test:
-            print(f'Test Result for Follow-up Email to {investor['name']}:\n{follow_up_body}')
+            print(f'Test Result for Follow-up Email to {investor["name"]}:\n{follow_up_body}')
         else:
-            email_manager.send_email([investor['email']], [], [], follow_up_subject, follow_up_body)
+            import datetime
+            email_manager = EmailManager()
+            email_manager.send_email(
+                subject=follow_up_subject, 
+                to=[investor['email']], 
+                attachments=[],
+                date=datetime.datetime.now(),
+                cc=[],
+                msg={
+                    'To': [investor['email']],
+                    'From':[],
+                    'Cc': [],
+                    'Subject': follow_up_subject
+                },
+                body=follow_up_body)
 
 
 if __name__ == '__main__':
